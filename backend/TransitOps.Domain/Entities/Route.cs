@@ -78,11 +78,6 @@ public class Route
 
     public void Activate()
     {
-        if (Status == RouteStatus.Active)
-        {
-            return;
-        }
-
         if (Status != RouteStatus.Draft)
         {
             throw new InvalidOperationException("Only draft routes can be activated.");
@@ -98,11 +93,6 @@ public class Route
 
     public void Resume()
     {
-        if (Status == RouteStatus.Active)
-        {
-            return;
-        }
-
         if (Status != RouteStatus.Suspended)
         {
             throw new InvalidOperationException("Only suspended routes can be resumed.");
@@ -113,11 +103,6 @@ public class Route
 
     public void Suspend()
     {
-        if (Status == RouteStatus.Suspended)
-        {
-            return;
-        }
-
         if (Status != RouteStatus.Active)
         {
             throw new InvalidOperationException("Only active routes can be suspended.");
@@ -128,14 +113,9 @@ public class Route
 
     public void Retire()
     {
-        if (Status == RouteStatus.Retired)
+        if (Status == RouteStatus.Draft || Status == RouteStatus.Retired)
         {
-            return;
-        }
-
-        if (Status == RouteStatus.Draft)
-        {
-            throw new InvalidOperationException("Draft routes cannot be retired.");
+            throw new InvalidOperationException("Only active or suspended routes can be retired.");
         }
 
         Status = RouteStatus.Retired;

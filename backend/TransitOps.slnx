@@ -2,5 +2,6 @@
   <Project Path="TransitOps.Api/TransitOps.Api.csproj" />
   <Project Path="TransitOps.Application/TransitOps.Application.csproj" />
   <Project Path="TransitOps.Domain/TransitOps.Domain.csproj" />
+  <Project Path="TransitOps.Domain.Tests/TransitOps.Domain.Tests.csproj" />
   <Project Path="TransitOps.Infrastructure/TransitOps.Infrastructure.csproj" />
 </Solution>

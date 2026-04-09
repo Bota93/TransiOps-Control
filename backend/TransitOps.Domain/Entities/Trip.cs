@@ -61,11 +61,6 @@ public class Trip
 
     public void MarkReady()
     {
-        if (Status == TripStatus.Ready)
-        {
-            return;
-        }
-
         if (Status != TripStatus.Planned)
         {
             throw new InvalidOperationException("Only planned trips can be marked as ready.");
@@ -81,11 +76,6 @@ public class Trip
 
     public void Start()
     {
-        if (Status == TripStatus.InProgress)
-        {
-            return;
-        }
-
         if (Status != TripStatus.Ready)
         {
             throw new InvalidOperationException("Only ready trips can be started.");
@@ -96,11 +86,6 @@ public class Trip
 
     public void Complete()
     {
-        if (Status == TripStatus.Completed)
-        {
-            return;
-        }
-
         if (Status != TripStatus.InProgress)
         {
             throw new InvalidOperationException("Only trips in progress can be completed.");
@@ -111,11 +96,6 @@ public class Trip
 
     public void Cancel()
     {
-        if (Status == TripStatus.Cancelled)
-        {
-            return;
-        }
-
         if (Status != TripStatus.Planned && Status != TripStatus.Ready)
         {
             throw new InvalidOperationException("Only planned or ready trips can be cancelled.");
