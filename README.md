@@ -1,111 +1,102 @@
 <h1 align="center">TransitOps Control</h1>
 
 <p align="center">
-  TransitOps Control is an operational transport monitoring and simulation platform designed to model real-world transport workflows with an enterprise-oriented architecture.
+  TransitOps Control is a production-minded transport operations platform being built around a clear backend domain model and a layered architecture.
 </p>
 
 <p align="center">
-  The system focuses on route operations, vehicle tracking, incident management, operational alerts, and service visibility through a backend-first architecture with a visual frontend.
-</p>
-
-<p align="center">
-  This project is being built as a production-minded modular system, not as a basic CRUD demo. Its goal is to demonstrate sound engineering practices, realistic business modeling, and a system design that can evolve into a deployable application.
+  The project focuses on representing real operational concepts such as routes, stops, vehicles, and trips before expanding into use cases, persistence, and API behavior.
 </p>
 
 ---
 
 ## Project Goals
 
-- Build a transport operations platform with a realistic domain model
-- Simulate vehicle movement and operational state transitions
-- Expose a professional backend API
-- Provide a visual frontend for monitoring routes, vehicles, incidents, and metrics
-- Maintain a clean, scalable architecture suitable for future deployment
-
----
-
-## Core Functional Areas
-
-Planned functional areas include:
-
-- Route management
-- Stop and station management
-- Fleet and vehicle status tracking
-- Trip and service run management
-- Incident registration and resolution
-- Operational alerts
-- Telemetry and simulated movement updates
-- Dashboard and operational metrics
+- Build a transport operations platform with a clear and maintainable business model
+- Model operational concepts and lifecycle rules explicitly in the domain layer
+- Evolve the backend through clean architectural boundaries
+- Provide a frontend client on top of a stable backend API
+- Keep the system explainable in both technical and business terms
 
 ---
 
 ## Current Status
 
-> Project is currently in the planning and foundation setup phase.
+TransitOps Control is in the early backend foundation stage.
 
-Completed so far:
+Implemented so far:
 
-- Repository created
-- .NET solution initialized
-- Backend projects created:
-  - `TransitOps.Api`
-  - `TransitOps.Domain`
-  - `TransitOps.Application`
-  - `TransitOps.Infrastructure`
-- Initial project references being configured
-- Planning workflow, agents, and skills definition in progress
+- Repository conventions and engineering rules through `AGENTS.md`
+- Layered backend solution structure in `backend/`
+- Initial domain model in `TransitOps.Domain`
+- Core domain entities:
+  - `Vehicle`
+  - `Stop`
+  - `Route`
+  - `RouteStop`
+  - `Trip`
+- Explicit status enums for the current domain concepts:
+  - `VehicleStatus`
+  - `StopStatus`
+  - `RouteStatus`
+  - `TripStatus`
 
----
+Still pending:
 
-## Architecture Overview
-
-The backend follows a modular layered architecture:
-
-| Layer | Responsibility |
-| --- | --- |
-| **TransitOps.Domain** | Core business domain, entities, enums, and business rules |
-| **TransitOps.Application** | Use cases, contracts, application services, orchestration logic |
-| **TransitOps.Infrastructure** | Persistence, framework integrations, database access, external concerns |
-| **TransitOps.Api** | HTTP entry point, dependency injection, middleware, API exposure |
-
-The frontend will be built separately and will consume the API as the primary client.
+- Application use cases in `TransitOps.Application`
+- Persistence and EF Core implementation in `TransitOps.Infrastructure`
+- Real HTTP endpoints in `TransitOps.Api`
+- Frontend implementation
+- Domain tests
 
 ---
 
-## Planned Tech Stack
+## Backend Architecture
 
-| Area | Technologies |
-| --- | --- |
-| Backend | .NET<br />ASP.NET Core Web API<br />Entity Framework Core<br />PostgreSQL |
-| Frontend | React<br />TypeScript<br />Vite |
-| Infrastructure | Docker<br />Docker Compose |
-| Tooling | GitHub Issues / Project<br />Notion for planning and technical decision tracking<br />AGENTS.md and project skills for AI-assisted development workflow |
+The backend follows a layered structure:
 
----
+| Layer | Responsibility | Current State |
+| --- | --- | --- |
+| **TransitOps.Domain** | Core business concepts, state transitions, and invariants | Initial domain model implemented |
+| **TransitOps.Application** | Use cases, orchestration, contracts | Project created, no real use cases yet |
+| **TransitOps.Infrastructure** | Persistence, EF Core, integrations | Project created, no persistence implementation yet |
+| **TransitOps.Api** | HTTP entry points, configuration, composition root | Base ASP.NET Core template, no transport operations endpoints yet |
 
-## Working Principles
-
-This project is being developed with the following principles:
-
-- Clear separation of concerns
-- Domain-driven naming
-- Explicit business rules
-- Thin HTTP layer
-- Incremental delivery
-- Documentation alongside implementation
-- Production-minded decisions over portfolio shortcuts
+This separation exists to keep business rules independent from transport, database, and framework concerns.
 
 ---
 
-## Roadmap
+## Current Domain Model
 
-| Phase | Scope |
-| --- | --- |
-| Phase 1 — Foundation | Solution structure<br />Project references<br />Working conventions<br />Planning documents<br />Core domain design |
-| Phase 2 — Backend Core | Routes<br />Stops<br />Vehicles<br />Trips<br />Incidents<br />Alerts |
-| Phase 3 — Simulation | Background processing<br />Telemetry updates<br />State transitions<br />Live operational view |
-| Phase 4 — Frontend | Dashboard<br />Map visualization<br />Tables and filters<br />Operational timeline |
-| Phase 5 — Deployment and Documentation | API documentation<br />Technical decisions<br />Demo dataset<br />Deployment setup |
+The initial domain model covers the core transport operation concepts:
+
+- `Vehicle`
+  - Identified by `Id`
+  - Tracks fleet code, capacity, and operational status
+- `Stop`
+  - Identified by `Id`
+  - Tracks stop code, name, and active/inactive state
+- `Route`
+  - Aggregate root for route definition
+  - Owns an ordered collection of `RouteStop`
+  - Controls stop sequencing and route lifecycle transitions
+- `RouteStop`
+  - Represents the inclusion of a stop inside a route
+  - Stores `StopId` and `Sequence`
+- `Trip`
+  - Represents a planned or running service instance for a route
+  - References a route and an optionally assigned vehicle
+  - Controls assignment and trip lifecycle transitions
+
+Key business rules currently modeled in the domain include:
+
+- Route stops can only be modified while a route is in `Draft`
+- A route needs at least two stops before it can be activated
+- Trip vehicle assignment is only allowed while the trip is `Planned` or `Ready`
+- A trip cannot be marked as ready without an assigned vehicle
+- Completed and cancelled trips are terminal states
+
+More detail is documented in [docs/domain-model.md](/c:/Proyectos/TransiOps-Control/docs/domain-model.md).
 
 ---
 
@@ -113,14 +104,37 @@ This project is being developed with the following principles:
 
 ```text
 backend/
-frontend/
+  AGENTS.md
+  skills/
+  TransitOps.slnx
+  TransitOps.Api/
+  TransitOps.Application/
+  TransitOps.Domain/
+  TransitOps.Infrastructure/
 docs/
+frontend/
 AGENTS.md
 README.md
 ```
 
-Structure will evolve as the project setup is completed.
+---
 
-## Notes
+## Planned Next Steps
 
-> This repository is intentionally being built with a strong planning and architecture phase before feature implementation. The objective is to establish a robust development workflow and a maintainable technical foundation from the start.
+- Add domain-focused tests for the existing invariants
+- Replace template code in `TransitOps.Api` with real application wiring
+- Introduce first application use cases around routes, stops, vehicles, and trips
+- Add persistence in `TransitOps.Infrastructure` once the application workflows are defined
+
+---
+
+## Working Principles
+
+This repository is being developed with the following principles:
+
+- Correctness before speed
+- Clear business language
+- Explicit invariants and state transitions
+- Thin API and framework-agnostic domain
+- Incremental delivery
+- Documentation that matches the real state of the project
