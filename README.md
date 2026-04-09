@@ -29,6 +29,7 @@ Implemented so far:
 - Repository conventions and engineering rules through `AGENTS.md`
 - Layered backend solution structure in `backend/`
 - Initial domain model in `TransitOps.Domain`
+- Dedicated domain test project in `TransitOps.Domain.Tests`
 - Core domain entities:
   - `Vehicle`
   - `Stop`
@@ -40,6 +41,10 @@ Implemented so far:
   - `StopStatus`
   - `RouteStatus`
   - `TripStatus`
+- Domain invariant coverage for the current core aggregates and entities:
+  - `Route`
+  - `Trip`
+  - `Vehicle`
 
 Still pending:
 
@@ -58,6 +63,7 @@ The backend follows a layered structure:
 | Layer | Responsibility | Current State |
 | --- | --- | --- |
 | **TransitOps.Domain** | Core business concepts, state transitions, and invariants | Initial domain model implemented |
+| **TransitOps.Domain.Tests** | Validation of domain invariants and lifecycle rules | xUnit test project implemented |
 | **TransitOps.Application** | Use cases, orchestration, contracts | Project created, no real use cases yet |
 | **TransitOps.Infrastructure** | Persistence, EF Core, integrations | Project created, no persistence implementation yet |
 | **TransitOps.Api** | HTTP entry points, configuration, composition root | Base ASP.NET Core template, no transport operations endpoints yet |
@@ -91,9 +97,11 @@ The initial domain model covers the core transport operation concepts:
 Key business rules currently modeled in the domain include:
 
 - Route stops can only be modified while a route is in `Draft`
+- Route lifecycle transitions are explicit and invalid repeated calls fail clearly
 - A route needs at least two stops before it can be activated
 - Trip vehicle assignment is only allowed while the trip is `Planned` or `Ready`
 - A trip cannot be marked as ready without an assigned vehicle
+- Trip lifecycle transitions are explicit and invalid repeated calls fail clearly
 - Completed and cancelled trips are terminal states
 
 More detail is documented in [docs/domain-model.md](/c:/Proyectos/TransiOps-Control/docs/domain-model.md).
@@ -110,6 +118,7 @@ backend/
   TransitOps.Api/
   TransitOps.Application/
   TransitOps.Domain/
+  TransitOps.Domain.Tests/
   TransitOps.Infrastructure/
 docs/
 frontend/

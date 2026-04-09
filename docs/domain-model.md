@@ -25,6 +25,19 @@ It does not yet cover:
 - persistence mapping
 - application use cases
 
+## Validation Status
+
+The current domain model is backed by a dedicated xUnit test project in `backend/TransitOps.Domain.Tests`.
+
+The implemented tests currently validate:
+
+- route editing and lifecycle rules
+- ordered route stop behavior
+- duplicate route stop prevention
+- trip lifecycle transitions
+- trip vehicle assignment constraints
+- vehicle out-of-service restrictions
+
 ## Entities
 
 ### Vehicle
@@ -190,3 +203,4 @@ The following areas are intentionally not implemented yet:
 - application use cases
 - API contracts
 - integration between the current domain model and future application workflows
+- broader testing outside the current domain layer
