@@ -47,7 +47,7 @@ Still pending:
 - Persistence and EF Core implementation in `TransitOps.Infrastructure`
 - Real HTTP endpoints in `TransitOps.Api`
 - Frontend implementation
-- Domain tests
+- Broader backend test coverage beyond the current domain layer
 
 ---
 
@@ -121,10 +121,10 @@ README.md
 
 ## Planned Next Steps
 
-- Add domain-focused tests for the existing invariants
 - Replace template code in `TransitOps.Api` with real application wiring
 - Introduce first application use cases around routes, stops, vehicles, and trips
 - Add persistence in `TransitOps.Infrastructure` once the application workflows are defined
+- Expand test coverage as new application and infrastructure behaviors are introduced
 
 ---
 

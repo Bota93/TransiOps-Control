@@ -149,8 +149,9 @@ The current model explicitly protects the following business rules:
 - duplicate stops are not allowed inside the same route
 - stop sequence must remain valid after changes
 - a route needs at least two stops before activation
+- route lifecycle transitions are explicit and invalid repeated transitions fail clearly
 - only suspended routes can be resumed
-- draft routes cannot be retired
+- only active or suspended routes can be retired
 
 ### RouteStop
 
@@ -168,6 +169,7 @@ The current model explicitly protects the following business rules:
 - a trip can only start from `Ready`
 - a trip can only complete from `InProgress`
 - a trip can only cancel from `Planned` or `Ready`
+- trip lifecycle transitions are explicit and invalid repeated transitions fail clearly
 - completed and cancelled trips are terminal states
 - cancelling a trip releases its assigned vehicle reference
 
@@ -187,4 +189,4 @@ The following areas are intentionally not implemented yet:
 - persistence mapping
 - application use cases
 - API contracts
-- tests for domain invariants
+- integration between the current domain model and future application workflows
