@@ -2,8 +2,8 @@ namespace TransitOps.Domain.Enums;
 
 public enum TripStatus
 {
-    Scheduled,
-    Boarding,
+    Planned,
+    Ready,
     InProgress,
     Completed,
     Cancelled
